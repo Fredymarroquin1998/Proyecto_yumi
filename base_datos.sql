@@ -34,3 +34,7 @@ CREATE TABLE preferencias (
 	FOREIGN KEY(id_usuario) REFERENCES USUARIOS(id_usuario),
 	FOREIGN KEY(id_receta) REFERENCES RECETAS(id_receta)
 );
+
+CREATE TABLE correlativo (
+	id int;
+);

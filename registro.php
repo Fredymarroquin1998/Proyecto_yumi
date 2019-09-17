@@ -8,6 +8,14 @@
             $correo=$_POST['correo'];
             $contrasena=$_POST['contrasena'];
             $contrasena2=$_POST['contrasena2'];
+            $img = "css/imagenes/perfil.jpg";
+            $dat = base64_encode(file_get_contents($img));
+            $src = 'data:'.mime_content_type($img).';base64,'.$dat;
+            $perfil=addslashes(file_get_contents($src));
+            $img0 = "css/imagenes/portada.png";
+            $dat0 = base64_encode(file_get_contents($img0));
+            $src0 = 'data:'.mime_content_type($img0).';base64,'.$dat0;
+            $portada=addslashes(file_get_contents($src0));
 
             if ($contrasena!=$contrasena2) {
                 echo '<script language="javascript">alert("Contraseñas con coinciden o no cumplen el formato");</script>';
@@ -27,7 +35,7 @@
                         echo '<script language="javascript">alert("Atencion, ya existe el mail designado para un usuario, verifique sus datos");</script>';
                         echo '<script language="javascript">location.href="registro.php"</script>';
                     }else{
-                        mysqli_query($mysqli,"INSERT INTO usuarios (id_usuario,correo,nombre_usuario,apellido_usuario,contrasena) VALUES('$usuario','$correo','$nombre','$apellido','$contrasena')");
+                        mysqli_query($mysqli,"INSERT INTO usuarios (id_usuario,correo,nombre_usuario,apellido_usuario,contrasena,foto_perfil,foto_portada) VALUES('$usuario','$correo','$nombre','$apellido','$contrasena','$perfil','$portada')");
                         $_SESSION['id_usuario']=$usuario;
                         header("Location:feed.php");
                         echo ' <script language="javascript">alert("Usuario registrado con éxito");</script> ';
@@ -57,27 +65,27 @@
                 <div class="wrapper">
                     <div class="row">
                         <div class="label">Usuario</div>
-                        <input type="text" name="usuario" class="confondo" value="" required>
+                        <input type="text" name="usuario" class="confondo" value="" maxlength="20" required>
                     </div>
                     <div class="row">
                         <div class="label">Nombre</div>
-                        <input type="text" name="nombre" class="confondo" value="" required >
+                        <input type="text" name="nombre" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
                     </div>
                     <div class="row">
                         <div class="label">Apellido</div>
-                        <input type="text" name="apellido" class="confondo" value="" required >
+                        <input type="text" name="apellido" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
                     </div>
                     <div class="row">
                         <div class="label">Correo electronico</div>
-                        <input type="text" name="correo" class="confondo" value="" required >
+                        <input type="text" name="correo" class="confondo" value="" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" required >
                     </div>
                     <div class="row">
                         <div class="label">Contraseña</div>
-                        <input type="password" name="contrasena" class="confondo" value="" required >
+                        <input type="password" name="contrasena" class="confondo" value="" maxlength="25" required >
                     </div>
                     <div class="row">
                         <div class="label">Confirma tu contraseña</div>
-                        <input type="password" name="contrasena2" class="confondo" value="" required >
+                        <input type="password" name="contrasena2" class="confondo" value="" maxlength="25" required >
                     </div>
                     <div class="row">
                        <button type="submit" name="submit" value="Registrarse" onclick="Limpiar();">Siguiente</button>

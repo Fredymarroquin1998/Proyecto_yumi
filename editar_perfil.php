@@ -3,8 +3,114 @@
     if (@!$_SESSION['id_usuario']) {
         header("location:index.php");
     }
-?>
 
+    require("conexion.php");
+
+    if (isset($_POST['submit'])) {
+        $id_usuario=$_SESSION['id_usuario'];
+        $nombre=$_POST['nombre'];
+        $apellido=$_POST['apellido'];
+        $usuario=$_POST['usuario'];
+        $correo=$_POST['correo'];
+        $contrasena=$_POST['contrasena'];
+        $descripcion=$_POST['descripcion'];
+        if (!empty($_FILES['perfil']['name']) && empty($_FILES['portada']['name'])) {
+            if($_FILES['perfil']['size'] > 16000000) {
+                echo '<script type="text/javascript">alert("Archivos muy pesados, no fue posible actualizar perfil");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            } else {
+                @$perfil=addslashes(file_get_contents($_FILES['perfil']['tmp_name']));
+                
+                $sql="UPDATE usuarios SET id_usuario='$usuario', correo='$correo', nombre_usuario='$nombre', apellido_usuario='$apellido', contrasena='$contrasena', descripcion='$descripcion', foto_perfil='$perfil' WHERE id_usuario='$id_usuario'";
+                $resultado=mysqli_query($mysqli,$sql);
+                if (@$resultado) {
+                    if ($id_usuario!=$usuario) {
+                        $sql1="UPDATE recetas SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        $sql1="UPDATE preferencias SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        session_write_close();
+                        session_id($usuario);
+                        session_start();
+                    }
+                    echo '<script type="text/javascript">alert("Informacion actualizada!");</script>';
+                    echo '<script language="javascript">location.href="cuenta.php"</script>';
+                } else {
+                    die("Error".mysqli_error($mysqli));
+                }
+            } 
+        } else if (!empty($_FILES['portada']['name']) && empty($_FILES['perfil']['name'])) {
+            if($_FILES['portada']['size'] > 16000000) {
+                echo '<script type="text/javascript">alert("Archivos muy pesados, no fue posible actualizar perfil");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            } else {
+                @$portada=addslashes(file_get_contents($_FILES['portada']['tmp_name']));
+
+                $sql="UPDATE usuarios SET id_usuario='$usuario', correo='$correo', nombre_usuario='$nombre', apellido_usuario='$apellido', contrasena='$contrasena', descripcion='$descripcion', foto_portada='$portada' WHERE id_usuario='$id_usuario'";
+                $resultado=mysqli_query($mysqli,$sql);
+                if (@$resultado) {
+                    if ($id_usuario!=$usuario) {
+                        $sql1="UPDATE recetas SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        $sql1="UPDATE preferencias SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        session_write_close();
+                        session_id($usuario);
+                        session_start();
+                    }
+                    echo '<script type="text/javascript">alert("Informacion actualizada!");</script>';
+                    echo '<script language="javascript">location.href="cuenta.php"</script>';
+                } else {
+                    die("Error".mysqli_error($mysqli));
+                }
+            } 
+        } else if (!empty($_FILES['perfil']['name']) && !empty($_FILES['portada']['name'])) {
+            if($_FILES['perfil']['size'] > 16000000 || $_FILES['portada']['size'] > 16000000) {
+                echo '<script type="text/javascript">alert("Archivos muy pesados, no fue posible actualizar perfil");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            } else {
+                @$perfil=addslashes(file_get_contents($_FILES['perfil']['tmp_name']));
+                @$portada=addslashes(file_get_contents($_FILES['portada']['tmp_name']));
+
+                $sql="UPDATE usuarios SET id_usuario='$usuario', correo='$correo', nombre_usuario='$nombre', apellido_usuario='$apellido', contrasena='$contrasena', descripcion='$descripcion', foto_perfil='$perfil', foto_portada='$portada' WHERE id_usuario='$id_usuario'";
+                $resultado=mysqli_query($mysqli,$sql);
+                if (@$resultado) {
+                    if ($id_usuario!=$usuario) {
+                        $sql1="UPDATE recetas SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        $sql1="UPDATE preferencias SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                        mysqli_query($mysqli,$sql1);
+                        session_write_close();
+                        session_id($usuario);
+                        session_start();
+                    }
+                    echo '<script type="text/javascript">alert("Informacion actualizada!");</script>';
+                    echo '<script language="javascript">location.href="cuenta.php"</script>';
+                } else {
+                    die("Error".mysqli_error($mysqli));
+                }
+            } 
+        } else if (empty($_FILES['perfil']['name']) && empty($_FILES['portada']['name'])) {
+            $sql="UPDATE usuarios SET id_usuario='$usuario', correo='$correo', nombre_usuario='$nombre', apellido_usuario='$apellido', contrasena='$contrasena', descripcion='$descripcion' WHERE id_usuario='$id_usuario'";
+            $resultado=mysqli_query($mysqli,$sql);
+            if (@$resultado) {
+                if ($id_usuario!=$usuario) {
+                    $sql1="UPDATE recetas SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                    mysqli_query($mysqli,$sql1);
+                    $sql1="UPDATE preferencias SET id_usuario='$usuario' WHERE id_usuario='$id_usuario'";
+                    mysqli_query($mysqli,$sql1);
+                    session_write_close();
+                    session_id($usuario);
+                    session_start();
+                }
+                echo '<script type="text/javascript">alert("Informacion actualizada!");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            } else {
+                die("Error".mysqli_error($mysqli));
+            }
+        }
+    }
+?>
 <!DOCTYPE html>
 <html>
     <link rel="stylesheet" href="css/editar_perfil.css"/>
@@ -16,13 +122,14 @@
             <div class="logo"> 
                 <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
             </div>
-            <input class="buscar" type="search" style="width:37%; height: 30%" size=32 placeholder="Search...">
+            <input class="buscar" type="search" style="width:31%; height: 30%" size=32 placeholder="Search...">
+            <select style="width:6%; height:30%"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
             <div class="textG">
                 <a href="buscar.php"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
             </div> 
             <div class="menuG">
                 <ul class="menu__list">
-                    <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" style="width:75%; height: 75%"><br>Inicio</a></li>
+                   <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="40" height="40"><br>Inicio</a></li>
                     <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="40" height="40"><br>Perfil</a></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="40" height="40"><br>Salir</a></li>
                 </ul>
@@ -30,22 +137,34 @@
         </div>
     </head>
     <body bgcolor="#B6F8F7">
-        <form method="post" action="" >
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'])?>" enctype="multipart/form-data">
+            <?php 
+                require('conexion.php');
+                $usuario_actual=$_SESSION['id_usuario'];
+                $resultado=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE id_usuario='$usuario_actual'");
+                $row=mysqli_fetch_array($resultado);
+            ?>
             <div class="login">
+                <div class="cancelar"><a href="cuenta.php"><img src="css/imagenes/cancel"></a></div>
                 <div class="form">
                     <div class="arriba_izquierda">
                         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-                        <div class="file-upload">
-                            <div class="image-upload-wrap">
-                                <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
-                                <div class="drag-text">
+                        <div class="file-upload0">
+                            <div class="image-upload-wrap0">
+                                <?php
+                                    echo "<img height='100%' width='100%' src='data:image/jpg;base64,";
+                                    echo base64_encode($row['foto_perfil']); 
+                                    echo "'>";
+                                ?>
+                                <div class="drag-text0">
+                                <input class="file-upload-input0" type='file' name="perfil" onchange="readURL0(this);" accept="image/*"/>
                                     <h3>Presione para cambiar imagen de perfil</h3>
                                 </div>
                             </div>
-                            <div class="file-upload-content">
-                                <img class="file-upload-image" src="#" alt="your image" />
-                                <div class="image-title-wrap">
-                                    <button type="button" onclick="removeUpload()" class="remove-image">Eliminar</button>
+                            <div class="file-upload-content0">  
+                                <img class="file-upload-image0" src="#" height="100" width="100" />
+                                <div class="image-title-wrap0"> 
+                                    <button type="button" onclick="removeUpload0()" class="remove-image0">Cambiar</button>
                                 </div>
                             </div>
                         </div>
@@ -54,48 +173,115 @@
                         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
                         <div class="file-upload">
                             <div class="image-upload-wrap">
-                                <input class="file-upload-input" type='file' onchange="readURL(this);" accept="image/*" />
+                                 <?php
+                                    echo "<img height='100%' width='100%' src='data:image/jpg;base64,";
+                                    echo base64_encode($row['foto_portada']); 
+                                    echo "'>";
+                                ?>                            
                                 <div class="drag-text">
+                                    <input class="file-upload-input" type='file' name="portada" onchange="readURL(this);" accept="image/*" />
                                     <h3>Presione para cambiar imagen de portada</h3>
                                 </div>
                             </div>
                             <div class="file-upload-content">
-                                <img class="file-upload-image" src="#" alt="your image" />
+                                <img class="file-upload-image" src="#" height="100" width="100"/>
                                 <div class="image-title-wrap">
-                                    <button type="button" onclick="removeUpload()" class="remove-image">Eliminar</button>
+                                    <button type="button" onclick="removeUpload()" class="remove-image">Cambiar</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="abajo_izquierda">
                         <div class="row">
-                            <div class="label">Nombre</div>
-                            <input type="text" name="nombre" class="confondo" required>
-                        </div>
-                        <div class="row">
-                            <div class="label">Apellido</div>
-                            <input type="text" name="apellido" class="confondo" required>
-                        </div>
-                        <div class="row">
                             <div class="label">Usuario</div>
-                            <input type="text" name="usuario" class="confondo" required>
+                            <input type="text" name="usuario" class="confondo" value="<?php echo $row[0] ?>" maxlength="20" required>
+                        </div>
+                        <div class="row">
+                            <div class="label0">Nombre</div>
+                            <input type="text" name="nombre" class="confondo" value="<?php echo $row[2] ?>" style="text-transform: capitalize;" maxlength="50" required>
+                        </div>
+                        <div class="row">
+                            <div class="label0">Apellido</div>
+                            <input type="text" name="apellido" class="confondo" value="<?php echo $row[3] ?>" style="text-transform: capitalize;" maxlength="50" required>
                         </div>
                     </div>
                     <div class="abajo_derecha">
                         <div class="row">
                             <div class="label">Correo Electronico</div>
-                            <input type="text" name="correo" class="confondo" required>
+                            <input type="text" name="correo" class="confondo" value="<?php echo $row[1] ?>" maxlength="50" required>
                         </div>
                         <div class="row">
                             <div class="label">Contraseña</div>
-                            <input type="text" name="contrasena" class="confondo" required>
+                            <input type="text" name="contrasena" class="confondo" value="<?php echo $row[4] ?>" maxlength="25" required>
                         </div>
                         <div class="row">
-                            <br><a href="cuenta.php"><button type="submit" name="submit">Guardar</button></a>
-                        </div> 
+                            <div class="label">Descripcion</div>
+                            <input type="text" name="descripcion" class="confondo" value="<?php echo $row[5] ?>" style="text-transform: capitalize;" maxlength="200" required>
+                        </div>
                     </div>
+                    <div class="guardar">
+                        <br><button type="submit" name="submit">Guardar</button>
+                    </div> 
                 </div>
             </div>
         </form>
+        <script type="text/javascript">
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                      $('.image-upload-wrap').hide();
+                      $('.file-upload-image').attr('src', e.target.result);
+                      $('.file-upload-content').show();
+                      $('.image-title').html(input.files[0].name);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    removeUpload();
+                }
+            }
+
+            function removeUpload() {
+              $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+              $('.file-upload-content').hide();
+              $('.image-upload-wrap').show();
+            }
+
+            $('.image-upload-wrap').bind('dragover', function () {
+                $('.image-upload-wrap').addClass('image-dropping');
+            });
+            $('.image-upload-wrap').bind('dragleave', function () {
+                $('.image-upload-wrap').removeClass('image-dropping');
+            });
+        </script>
+         <script type="text/javascript">
+            function readURL0(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                      $('.image-upload-wrap0').hide();
+                      $('.file-upload-image0').attr('src', e.target.result);
+                      $('.file-upload-content0').show();
+                      $('.image-title0').html(input.files[0].name);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                } else {
+                    removeUpload0();
+                }
+            }
+
+            function removeUpload0() {
+              $('.file-upload-input0').replaceWith($('.file-upload-input0').clone());
+              $('.file-upload-content0').hide();
+              $('.image-upload-wrap0').show();
+            }
+
+            $('.image-upload-wrap0').bind('dragover0', function () {
+                $('.image-upload-wrap0').addClass('image-dropping0');
+            });
+            $('.image-upload-wrap0').bind('dragleave0', function () {
+                $('.image-upload-wrap0').removeClass('image-dropping0');
+            });
+        </script>
     </body>
 </html>

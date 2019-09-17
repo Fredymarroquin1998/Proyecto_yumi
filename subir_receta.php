@@ -1,10 +1,13 @@
 <?php
+    session_start();
+    if (@!$_SESSION['id_usuario']) {
+        header("location:index.php");
+    }
+    
     require("conexion.php");
    
     if (isset($_POST['submit'])) {
     
-        session_start();
-       
         $id_usuario=$_SESSION['id_usuario'];
         $imagen=addslashes(file_get_contents($_FILES['imagen']['tmp_name']));
         $nombre=$_POST['nombre'];
@@ -66,7 +69,8 @@
             <div class="logo"> 
                 <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
             </div>
-            <input class="buscar" type="search" style="width:37%; height: 30%" size=32 placeholder="Search...">
+            <input class="buscar" type="search" style="width:31%; height: 30%" size=32 placeholder="Search...">
+            <select style="width:6%; height:30%"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
             <div class="textG">
                 <a href="buscar.php"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
             </div> 

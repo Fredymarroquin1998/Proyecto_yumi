@@ -16,7 +16,8 @@
             <div class="logo"> 
                 <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
             </div>
-            <input class="buscar" type="search" style="width:37%; height: 30%" size=32 placeholder="Search...">
+            <input class="buscar" type="search" style="width:31%; height: 30%" size=32 placeholder="Search...">
+            <select style="width:6%; height:30%"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
             <div class="textG">
                 <a href="buscar.php"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
             </div> 
@@ -167,7 +168,6 @@
             var item = $(".grid-item");
             item.hover(function() {
             item.not($(this)).addClass('blur');
-            // al perder el foco, retiro la clase a todos los 'item'
             }, function() {
             item.removeClass('blur');
             });
