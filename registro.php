@@ -1,5 +1,6 @@
 <?php
-   if (isset($_POST['submit']) && !empty($_POST['submit'])) {
+    require("conexion.php");
+    if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         if (isset($_POST['usuario']) && !empty($_POST['usuario']) && isset($_POST['nombre']) && !empty($_POST['nombre']) && isset($_POST['apellido']) && !empty($_POST['apellido']) && isset($_POST['correo']) && !empty($_POST['correo']) && isset($_POST['contrasena']) && !empty($_POST['contrasena']) && isset($_POST['contrasena2']) && !empty($_POST['contrasena2'])) {
             
             $usuario=$_POST['usuario'];
@@ -22,8 +23,6 @@
                 echo '<script language="javascript">location.href="registro.php"</script>';
             } else {
                 session_start();
-
-                require("conexion.php");
                 
                 $checkuser=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE id_usuario='$usuario");
                 $checkemail=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE correo='$correo'");
@@ -54,6 +53,7 @@
 <html>
     <link rel="stylesheet" href="css/registro.css"/>
     <link rel="shortcut icon" href="css/imagenes/yumi_icono.ico" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <head>
         <title>Yumi</title>
     </head>
@@ -64,10 +64,6 @@
             <div class="form">
                 <div class="wrapper">
                     <div class="row">
-                        <div class="label">Usuario</div>
-                        <input type="text" name="usuario" class="confondo" value="" maxlength="20" required>
-                    </div>
-                    <div class="row">
                         <div class="label">Nombre</div>
                         <input type="text" name="nombre" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
                     </div>
@@ -76,8 +72,18 @@
                         <input type="text" name="apellido" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
                     </div>
                     <div class="row">
+                        <div class="label">Usuario</div>
+                        <div class="verificar_u">
+                            <input type="text" name="usuario" class="confondo" value="" maxlength="20" id="usuario" onkeyup="comprueba_usuario();" required>
+                            <div id="result_usuario"></div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="label">Correo electronico</div>
-                        <input type="text" name="correo" class="confondo" value="" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" required >
+                        <div class="verificar_c">
+                            <input type="text" name="correo" class="confondo" value="" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
+                            <div id="result"></div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="label">Contraseña</div>
@@ -104,5 +110,33 @@
     function Limpiar() {
         var n = document.getElementById("name");
         n.value="";
+    }
+</script>
+
+<script type="text/javascript">
+    function comprueba_email(){
+        var correo = document.getElementById("correo").value;
+        $.ajax({
+            type : 'POST',
+            url : 'verificar_correo.php',
+            data : "correo="+correo,
+            success: function(r){
+                $('#result').html(r); 
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript">
+    function comprueba_usuario(){
+        var usuario = document.getElementById("usuario").value;
+        $.ajax({
+            type : 'POST',
+            url : 'verificar_usuario.php',
+            data : "usuario="+usuario,
+            success: function(r){
+                $('#result_usuario').html(r); 
+            }
+        });
     }
 </script>

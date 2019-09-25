@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (@!$_SESSION['id_usuario']) {
+    if (@!$_SESSION['id_usuario'] || @!$_SESSION['correo']) {
         header("location:index.php");
     }
 ?>

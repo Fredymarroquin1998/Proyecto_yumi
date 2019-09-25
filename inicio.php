@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (@!$_SESSION['id_usuario']) {
+    if (@!$_SESSION['id_usuario'] || @!$_SESSION['correo']) {
         header("location:index.php");
     }
 ?>
@@ -57,7 +57,7 @@
                             <div class="label1">Ingredientes:<br>
                                 <table id="tabla_ingredientes">  
                                     <tr>  
-                                        <td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..."></td>  
+                                        <td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." style="text-transform: capitalize;" required></td>  
                                         <td><button type="button" name="add_ingrediente" id="add_ingrediente" class="mas" onclick="ing()">+</button></td>  
                                     </tr>  
                                 </table>  
@@ -67,7 +67,7 @@
                             <div class="label1"><br>Preparacion:<br>
                                 <table id="tabla_preparacion">  
                                     <tr>  
-                                        <td><input type="text" name="preparacion[]" placeholder="Primer paso..."></td>  
+                                        <td><input type="text" name="preparacion[]" placeholder="Primer paso..." style="text-transform: capitalize;" required></td>  
                                         <td><button type="button" name="add_preparacion" id="add_preparacion" class="mas" onclick="pre()">+</button></td>  
                                     </tr>  
                                 </table>  
@@ -77,12 +77,12 @@
                     <div class="derecha">
                         <div class="row">
                             <div class="label">Nombre Receta: <br>
-                                <input type="text" name="nombre" class="confondo" maxlength="30" required>
+                                <input type="text" name="nombre" class="confondo" maxlength="30" style="text-transform: capitalize;" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="label">Descripcion: <br>
-                                <input type="text" name="descripcion" class="confondo" maxlength="200" required>
+                                <input type="text" name="descripcion" class="confondo" maxlength="200">
                             </div>
                         </div>
                         <div class="row">
@@ -117,7 +117,7 @@
                         </div>
                         <div class="row">
                             <div class="label">Costo: $ 
-                                <input type="number" min="0.00" step="0.01" class="numeros" required pattern="[0-9]+\\.[0-9]{2}" value="0.00" name="costo">
+                                <input type="number" min="0.00" step="1.00" class="numeros" required pattern="[0-9]+\\.[0-9]{2}" value="0.00" name="costo">
                             </div>
                         </div>
                         <div class="row">
@@ -126,7 +126,7 @@
                         </div>
                         <div class="row">
                             <div class="label">Calorias: 
-                                <input type="number" name="calorias" min="0" class="numeros" required pattern="[0-9]+" value="0">
+                                <input type="number" name="calorias" min="0" class="numeros" pattern="[0-9]+" value="0">
                             </div>
                         </div>                    
                     </div>
@@ -142,7 +142,7 @@
             <?php
                 require("conexion.php");
 
-                $query="SELECT * FROM recetas";
+                $query="SELECT * FROM recetas ORDER BY id_receta DESC";
                 $resultado=mysqli_query($mysqli,$query);
                 while ($row=$resultado->fetch_assoc()) {
                     $name=$row['nombre_receta'];
@@ -198,7 +198,7 @@
                 var i=1;
                 $('#add_ingrediente').click(function(){  
                     i++;  
-                    $('#tabla_ingredientes').append('<tr id="linea'+i+'"><td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." class="name_list"></td><td><button type="button" name="remove ingrediente" id="'+i+'" class="btn_remove"> x </button></td></tr>');  
+                    $('#tabla_ingredientes').append('<tr id="linea'+i+'"><td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." class="name_list" style="text-transform: capitalize;" required></td><td><button type="button" name="remove ingrediente" id="'+i+'" class="btn_remove"> x </button></td></tr>');  
                 });
                 $(document).on('click', '.btn_remove', function(){  
                     var button_id = $(this).attr("id");   
@@ -209,7 +209,7 @@
                 var j=1;
                 $('#add_preparacion').click(function(){  
                     j++;  
-                    $('#tabla_preparacion').append('<tr id="lineas'+j+'"><td><input type="text" name="preparacion[]" placeholder="Siguiente paso..." class="name_list"></td><td><button type="button" name="remove preparacion" id="'+j+'" class="btns_remove"> x </button></td></tr>');  
+                    $('#tabla_preparacion').append('<tr id="lineas'+j+'"><td><input type="text" name="preparacion[]" placeholder="Siguiente paso..." class="name_list" style="text-transform: capitalize;" required></td><td><button type="button" name="remove preparacion" id="'+j+'" class="btns_remove"> x </button></td></tr>');  
                 });  
                 $(document).on('click', '.btns_remove', function(){  
                     var buttons_id = $(this).attr("id");   

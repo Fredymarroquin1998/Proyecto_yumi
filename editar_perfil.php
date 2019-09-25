@@ -1,19 +1,38 @@
 <?php
     session_start();
-    if (@!$_SESSION['id_usuario']) {
+    if (@!$_SESSION['id_usuario'] || @!$_SESSION['correo']) {
         header("location:index.php");
     }
 
-    require("conexion.php");
-
     if (isset($_POST['submit'])) {
         $id_usuario=$_SESSION['id_usuario'];
+        $correo_sesion=$_SESSION['correo'];
         $nombre=$_POST['nombre'];
         $apellido=$_POST['apellido'];
         $usuario=$_POST['usuario'];
         $correo=$_POST['correo'];
         $contrasena=$_POST['contrasena'];
         $descripcion=$_POST['descripcion'];
+        
+        require("conexion.php");
+
+        $checkuser=mysqli_query($mysqli,"SELECT COUNT(*) FROM usuarios WHERE id_usuario='$usuario'");
+        $checkemail=mysqli_query($mysqli,"SELECT COUNT(*) FROM usuarios WHERE correo='$correo'");
+   
+        if ($id_usuario!=$usuario) {
+            $row=mysqli_fetch_array($checkuser);
+            if ($row[0]>0) {
+                echo '<script language="javascript">alert("Atencion, ya existe este usuario, verifique sus datos");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            }
+        }
+        if ($correo!=$correo_sesion) {
+            if(mysqli_num_rows($checkemail)>0){
+                echo '<script language="javascript">alert("Atencion, ya existe el mail designado para un usuario, verifique sus datos");</script>';
+                echo '<script language="javascript">location.href="cuenta.php"</script>';
+            }
+        }
+        
         if (!empty($_FILES['perfil']['name']) && empty($_FILES['portada']['name'])) {
             if($_FILES['perfil']['size'] > 16000000) {
                 echo '<script type="text/javascript">alert("Archivos muy pesados, no fue posible actualizar perfil");</script>';
@@ -115,6 +134,7 @@
 <html>
     <link rel="stylesheet" href="css/editar_perfil.css"/>
     <link rel="shortcut icon" href="css/imagenes/yumi_icono.ico" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Yumi</title>
     <head>
@@ -194,7 +214,10 @@
                     <div class="abajo_izquierda">
                         <div class="row">
                             <div class="label">Usuario</div>
-                            <input type="text" name="usuario" class="confondo" value="<?php echo $row[0] ?>" maxlength="20" required>
+                            <div class="verificar_u">
+                                <input type="text" name="usuario" class="confondo" value="<?php echo $row[0] ?>" maxlength="20" id="usuario" onkeyup="comprueba_usuario();" required>
+                                <div id="result_usuario"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="label0">Nombre</div>
@@ -208,7 +231,10 @@
                     <div class="abajo_derecha">
                         <div class="row">
                             <div class="label">Correo Electronico</div>
-                            <input type="text" name="correo" class="confondo" value="<?php echo $row[1] ?>" maxlength="50" required>
+                            <div class="verificar_c">
+                                <input type="text" name="correo" class="confondo" value="<?php echo $row[1] ?>" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
+                                <div id="result"></div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="label">Contraseña</div>
@@ -283,5 +309,34 @@
                 $('.image-upload-wrap0').removeClass('image-dropping0');
             });
         </script>
+
+        <script type="text/javascript">
+            function comprueba_email(){
+                var correo = document.getElementById("correo").value;
+                $.ajax({
+                    type : 'POST',
+                    url : 'verificar_correo.php',
+                    data : "correo="+correo,
+                    success: function(r){
+                        $('#result').html(r); 
+                    }
+                });
+            }
+        </script>
+
+        <script type="text/javascript">
+            function comprueba_usuario(){
+                var usuario = document.getElementById("usuario").value;
+                $.ajax({
+                    type : 'POST',
+                    url : 'verificar_usuario.php',
+                    data : "usuario="+usuario,
+                    success: function(r){
+                        $('#result_usuario').html(r); 
+                    }
+                });
+            }
+        </script>
+
     </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-    if(isset($_SESSION['id_usuario'])){
+    if(isset($_SESSION['id_usuario']) || isset($_SESSION['correo'])){
         header("Location: inicio.php");
     }
     if (isset($_POST['submit']) && !empty($_POST['submit'])) {
@@ -8,13 +8,26 @@
             $contrasena= $_POST['contrasena'];
             
             require("conexion.php");
-
+            $query1=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE correo='$usuario'");
             $query=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE id_usuario='$usuario'");
             if (mysqli_num_rows($query)>0) {
                 while ($row=mysqli_fetch_assoc($query)) {
                     if ($contrasena==$row['contrasena'] && $usuario==$row['id_usuario']) {
                         session_start();
                         $_SESSION['id_usuario']=$row['id_usuario'];
+                        $_SESSION['correo']=$row['correo'];
+                        header("Location:inicio.php");
+                    }else{
+                        echo '<script language="javascript">alert("CONTRASEÑA INCORRECTA");</script>';
+                    }
+                } 
+            }
+            else if (mysqli_num_rows($query1)>0) {
+                while ($row=mysqli_fetch_assoc($query1)) {
+                    if ($contrasena==$row['contrasena'] && $usuario==$row['correo']) {
+                        session_start();
+                        $_SESSION['id_usuario']=$row['id_usuario'];
+                        $_SESSION['correo']=$row['correo'];
                         header("Location:inicio.php");
                     }else{
                         echo '<script language="javascript">alert("CONTRASEÑA INCORRECTA");</script>';
@@ -45,7 +58,7 @@
                 <div class="form">
                     <div class="wrapper">
                         <div class="row">
-                            <div class="label">Usuario</div>
+                            <div class="label">Usuario o Correo Electronico</div>
                             <input type="text" name="usuario" class="confondo" value="" required>
                         </div>
                         <div class="row">
