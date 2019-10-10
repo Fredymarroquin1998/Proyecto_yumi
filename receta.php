@@ -1,35 +1,50 @@
-<?php
-  session_start();
-  if (@!$_SESSION['id_usuario'] || @!$_SESSION['correo']) {
-    header("location:index.php");
-  }
+<<?php
+    session_start();
+    if (@!$_SESSION['id_usuario'] || @!$_SESSION['correo']) {
+        header("location:index.php");
+    }
 ?>
 
 <!DOCTYPE html>
 <html>
-    <link rel = "stylesheet" href="css/receta.css">
+    <link rel="stylesheet" href="css/receta.css">
     <link rel="shortcut icon" href="css/imagenes/yumi_icono.ico">       
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
-    <head >
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Yumi</title>
+    <head>
         <div class="barra" >
-            <div class="icono"> 
-                <a href="inicio.php"><img src="css/imagenes/yumi_icono.jpeg" height="75" width="75"></a>
-            </div>
             <div class="logo"> 
-                <a href="inicio.php"><img src="css/imagenes/yumilogo.png" height="75" width="110"></a>
+                <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
             </div>
-            <input class="buscar" type="search" style="width:31%; height: 30%" size=32 placeholder="Search...">
-            <select style="width:6%; height:30%"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
-            <div class="textG">
-                <a href="buscar.php"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
-            </div> 
+            <form method="GET" action="buscar.php">
+                <div class="buscar_tipo">
+                    <select name="busqueda_tipo" id="busqueda_tipo">
+                        <option value="1">Bebida</option>
+                        <option value="2">Ensalada</option>
+                        <option value="3">Desayuno</option>
+                        <option value="4">Sandwich</option>
+                        <option value="5">Postre</option>
+                        <option value="6">Sopa</option>
+                        <option value="7">Crema</option>
+                        <option value="8">Carne</option>
+                        <option value="9">Pasta</option>
+                        <option value="10">Salsa</option>
+                        <option value="11">Bocadillo</option>
+                        <option value="12">Platillo principal</option>
+                        <option value="13">Acompañante</option>
+                        <option value="14">Mariscos</option>
+                    </select>                
+                </div>
+                <input class="buscar" type="search" name="busqueda" id="busqueda" style="width:31%; height: 30%" size=32 placeholder="Search...">
+                <select style="width:6%; height:30%;" name="opcion" id="opcion" onchange="tipos();"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
+                <div class="textG">
+                    <a href="buscar.php?opciones=opcion&buscar=busqueda|busqueda_tipo"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
+                </div> 
+            </form>
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="40" height="40"><br>Inicio</a></li>
-                    <li>x</li>
                     <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="40" height="40"><br>Perfil</a></li>
-                    <li>x</li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="40" height="40"><br>Salir</a></li>
                 </ul>
             </div>
@@ -86,3 +101,14 @@
         </div>
     </body>
 </html>
+<script type="text/javascript">
+    function tipos(){
+        if ($('#opcion').val()=="tipo") {
+            document.getElementById('busqueda_tipo').style.display = 'block';
+            document.getElementById('busqueda').style.display = 'none';
+        } else {
+            document.getElementById('busqueda_tipo').style.display = 'none';
+            document.getElementById('busqueda').style.display = 'block';
+        }
+    }
+</script>

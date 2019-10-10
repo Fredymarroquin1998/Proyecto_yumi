@@ -7,7 +7,7 @@
 
 <!DOCTYPE html>
 <html>
-    <link rel = "stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="css/inicio.css">
     <link rel="shortcut icon" href="css/imagenes/yumi_icono.ico">       
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Yumi</title>
@@ -16,11 +16,31 @@
             <div class="logo"> 
                 <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
             </div>
-            <input class="buscar" type="search" style="width:31%; height: 30%" size=32 placeholder="Search...">
-            <select style="width:6%; height:30%"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
-            <div class="textG">
-                <a href="buscar.php"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
-            </div> 
+            <form method="GET" action="buscar.php">
+                <div class="buscar_tipo">
+                    <select name="busqueda_tipo" id="busqueda_tipo">
+                        <option value="1">Bebida</option>
+                        <option value="2">Ensalada</option>
+                        <option value="3">Desayuno</option>
+                        <option value="4">Sandwich</option>
+                        <option value="5">Postre</option>
+                        <option value="6">Sopa</option>
+                        <option value="7">Crema</option>
+                        <option value="8">Carne</option>
+                        <option value="9">Pasta</option>
+                        <option value="10">Salsa</option>
+                        <option value="11">Bocadillo</option>
+                        <option value="12">Platillo principal</option>
+                        <option value="13">Acompañante</option>
+                        <option value="14">Mariscos</option>
+                    </select>                
+                </div>
+                <input class="buscar" type="search" name="busqueda" id="busqueda" style="width:31%; height: 30%" size=32 placeholder="Search...">
+                <select style="width:6%; height:30%;" name="opcion" id="opcion" onchange="tipos();"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
+                <div class="textG">
+                    <a href="buscar.php?opciones=opcion&buscar=busqueda|busqueda_tipo"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
+                </div> 
+            </form>
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="40" height="40"><br>Inicio</a></li>
@@ -147,7 +167,35 @@
                 while ($row=$resultado->fetch_assoc()) {
                     $name=$row['nombre_receta'];
                     $user=$row['id_usuario'];
-                    $type=$row['tipo'];
+                    if ($row['tipo']==1) {
+                        $type='Bebida';
+                    } else if ($row['tipo']==2) {
+                        $type='Ensalda';
+                    } else if ($row['tipo']==3) {
+                        $type='Desayuno';
+                    } else if ($row['tipo']==4) {
+                        $type='Sandwich';
+                    } else if ($row['tipo']==5) {
+                        $type='Postre';
+                    } else if ($row['tipo']==6) {
+                        $type='Sopa';
+                    } else if ($row['tipo']==7) {
+                        $type='Crema';
+                    } else if ($row['tipo']==8) {
+                        $type='Carne';
+                    } else if ($row['tipo']==9) {
+                        $type='Pasta';
+                    } else if ($row['tipo']==10) {
+                        $type='Salsa';
+                    } else if ($row['tipo']==11) {
+                        $type='Bocadillo';
+                    } else if ($row['tipo']==12) {
+                        $type='Platillo principal';
+                    } else if ($row['tipo']==13) {
+                        $type='Acompañante';
+                    } else if ($row['tipo']==14) {
+                        $type='Mariscos';
+                    }
                     $calor=$row['calorias'];
                     $cal=$row['calificacion'];
             ?>
@@ -248,3 +296,15 @@
         </script>
     </body>
 </html>
+
+<script type="text/javascript">
+    function tipos(){
+        if ($('#opcion').val()=="tipo") {
+            document.getElementById('busqueda_tipo').style.display = 'block';
+            document.getElementById('busqueda').style.display = 'none';
+        } else {
+            document.getElementById('busqueda_tipo').style.display = 'none';
+            document.getElementById('busqueda').style.display = 'block';
+        }
+    }
+</script>
