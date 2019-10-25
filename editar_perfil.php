@@ -140,11 +140,11 @@
     <head>
         <div class="barra" >
             <div class="logo"> 
-                <a href="inicio.php"><img src="css/imagenes/inicio" height="80" width="250"></a>
+                <a href="inicio.php"><img src="css/imagenes/inicio" width="85%"></a>
             </div>
             <form method="GET" action="buscar.php">
                 <div class="buscar_tipo">
-                    <select name="busqueda_tipo" id="busqueda_tipo">
+                    <select name="busqueda_tipo" id="busqueda_tipo" style="width:425px; height:24px; display: none;">
                         <option value="1">Bebida</option>
                         <option value="2">Ensalada</option>
                         <option value="3">Desayuno</option>
@@ -161,17 +161,21 @@
                         <option value="14">Mariscos</option>
                     </select>                
                 </div>
-                <input class="buscar" type="search" name="busqueda" id="busqueda" style="width:31%; height: 30%" size=32 placeholder="Search...">
-                <select style="width:6%; height:30%;" name="opcion" id="opcion" onchange="tipos();"><option value="nombre">Nombre</option><option value="tipo">Tipo</option><option value="calorias">Calorias</option></select>
+                <input class="buscar" type="search" name="busqueda" id="busqueda" style="width:31%; height: 30%;" size=32 placeholder="Search...">
+                <select style="width:6%; height:30%;" name="opcion" id="opcion" onchange="tipos()">
+                    <option value="nombre">Nombre</option>
+                    <option value="tipo">Tipo</option>
+                    <option value="calorias">Calorias</option>
+                </select>
                 <div class="textG">
                     <a href="buscar.php?opciones=opcion&buscar=busqueda|busqueda_tipo"><input type=image src="css/imagenes/search.png" width="30" height="30" class="boton"></a>
                 </div> 
             </form>
             <div class="menuG">
                 <ul class="menu__list">
-                    <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="40" height="40"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="40" height="40"><br>Perfil</a></li>
-                    <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="40" height="40"><br>Salir</a></li>
+                    <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
         </div>
@@ -360,9 +364,10 @@
 
     </body>
 </html>
-<script type="text/javascript">
+<script>
     function tipos(){
-        if ($('#opcion').val()=="tipo") {
+        var opcion=document.getElementById("opcion").value;
+        if (opcion=="tipo") {
             document.getElementById('busqueda_tipo').style.display = 'block';
             document.getElementById('busqueda').style.display = 'none';
         } else {

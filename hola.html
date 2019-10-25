@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <!-- Injectamos la libreria brain.js y declaramos el set de caracteres a UTF-8 -->
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/brain/0.6.3/brain.js'></script>
+    </head>
+    <body>
+    <h1>Run</h1>
+         
+<div class='field'>
+    <p>estrellas</p>
+    <input id='estrellas'  style='width: 60%;'/>
+</div>
+         
+<div class='field'>
+    <p>guardar</p>
+    <input id='guardar' style='width: 60%;'/>
+</div>
+         
+<div class='field'>
+    <p>calificacion</p>
+    <input id='calificacion' style='width: 60%;'/>
+</div>
+ 
+
+
+ 
+<div class='clear'>&nbsp;</div>
+ 
+<p>
+    <button onclick='javascript: testModel();'>Test</button>
+</p>
+ 
+<p id='test-model'></p>
+ 
+<style>
+    .field {
+        float: left;
+        width: 120px;
+        margin-right: 5px;
+        }
+ 
+    .field input, .field select {
+        width: 100%;
+        }
+ 
+    .clear {
+        clear: both;
+        overflow: hidden;
+        height: 1px;
+        }
+</style>
+ 
+<script>
+    var arregloF =[];
+    /* Esta función se encarga de ejecutar el formulario sobre la red neuronal */
+    function testModel() {
+        var t={
+            estrellas: document.getElementById("estrellas").value,
+            guardar: document.getElementById("guardar").value,
+            calificacion: document.getElementById("calificacion").value
+           
+            };
+ 
+        var result=net.run( t );
+        var aux =JSON.stringify(result.s);
+        alert(aux);
+        }          
+            /* Declaramos el set de datos de entrenamiento */
+            var train= [
+                { input: { estrellas: 1,guardar: 1 }, output: { s: 0.42 } },
+                { input: { estrellas: 1,guardar: 0 }, output: { s: 0.32 } },
+                { input: { estrellas: 2,guardar: 1 }, output: { s: 0.47 } },
+                { input: { estrellas: 2,guardar: 0 }, output: { s: 0.42 } },
+                { input: { estrellas: 3,guardar: 1 }, output: { s: 0.62 } },
+                { input: { estrellas: 3,guardar: 0 }, output: { s: 0.52 } },
+                { input: { estrellas: 4,guardar: 1 }, output: { s: 0.82 } },
+                { input: { estrellas: 4,guardar: 0 }, output: { s: 0.72 } },
+                { input: { estrellas: 5,guardar: 1 }, output: { s: 1.02 } },
+                { input: { estrellas: 5,guardar: 0 }, output: { s: 0.97 } },
+                { input: { estrellas: 0,guardar: 1 }, output: { s: 0.22 } },
+                { input: { estrellas: 0,guardar: 0 }, output: { s: 0.02 } },
+
+      
+                
+                ];
+
+            /* Declaramos la red neuronal */
+            var net = new brain.NeuralNetwork();
+ 
+            /* Entrenamos la red neuronal con los datos de entrenamiento */
+            net.train( train );
+
+        </script>
+         
+    </body>
+</html>     

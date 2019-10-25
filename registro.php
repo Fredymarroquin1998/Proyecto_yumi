@@ -2,7 +2,6 @@
     require("conexion.php");
     if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         if (isset($_POST['usuario']) && !empty($_POST['usuario']) && isset($_POST['nombre']) && !empty($_POST['nombre']) && isset($_POST['apellido']) && !empty($_POST['apellido']) && isset($_POST['correo']) && !empty($_POST['correo']) && isset($_POST['contrasena']) && !empty($_POST['contrasena']) && isset($_POST['contrasena2']) && !empty($_POST['contrasena2'])) {
-            
             $usuario=$_POST['usuario'];
             $nombre=$_POST['nombre'];
             $apellido= $_POST['apellido'];
@@ -18,12 +17,11 @@
             $src0 = 'data:'.mime_content_type($img0).';base64,'.$dat0;
             $portada=addslashes(file_get_contents($src0));
 
+
             if ($contrasena!=$contrasena2) {
                 echo '<script language="javascript">alert("Contraseñas con coinciden o no cumplen el formato");</script>';
                 echo '<script language="javascript">location.href="registro.php"</script>';
             } else {
-                session_start();
-                
                 $checkuser=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE id_usuario='$usuario");
                 $checkemail=mysqli_query($mysqli,"SELECT * FROM usuarios WHERE correo='$correo'");
                 if (@mysqli_num_rows($checkuser)>0) {
@@ -34,11 +32,16 @@
                         echo '<script language="javascript">alert("Atencion, ya existe el mail designado para un usuario, verifique sus datos");</script>';
                         echo '<script language="javascript">location.href="registro.php"</script>';
                     }else{
-                        mysqli_query($mysqli,"INSERT INTO usuarios (id_usuario,correo,nombre_usuario,apellido_usuario,contrasena,foto_perfil,foto_portada) VALUES('$usuario','$correo','$nombre','$apellido','$contrasena','$perfil','$portada')");
+                        $query=mysqli_query($mysqli,"INSERT INTO usuarios (id_usuario,correo,nombre_usuario,apellido_usuario,contrasena,foto_perfil,foto_portada) VALUES('$usuario','$correo','$nombre','$apellido','$contrasena','$perfil','$portada')") or die(mysqli_error());
+                        $row=@mysqli_fetch_array($query);
+                        session_start();
                         $_SESSION['id_usuario']=$usuario;
-                        header("Location:feed.php");
-                        echo ' <script language="javascript">alert("Usuario registrado con éxito");</script> ';
-                        exit;       
+                        $_SESSION['correo']=$correo;
+                        
+                        
+                        echo '<script language="javascript">alert("Usuario registrado con éxito");</script>';
+                        
+                        echo '<script language="javascript">location.href="feed.php"</script>';      
                     }
                 }
             }
@@ -65,16 +68,16 @@
                 <div class="wrapper">
                     <div class="row">
                         <div class="label">Nombre</div>
-                        <input type="text" name="nombre" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
+                        <input type="text" name="nombre" class="confondo" value="" style="text-transform: capitalize;" maxlength="20" required >
                     </div>
                     <div class="row">
                         <div class="label">Apellido</div>
-                        <input type="text" name="apellido" class="confondo" value="" style="text-transform: capitalize;" maxlength="50" required >
+                        <input type="text" name="apellido" class="confondo" value="" style="text-transform: capitalize;" maxlength="20" required >
                     </div>
                     <div class="row">
                         <div class="label">Usuario</div>
                         <div class="verificar_u">
-                            <input type="text" name="usuario" class="confondo" value="" maxlength="20" id="usuario" onkeyup="comprueba_usuario();" required>
+                            <input type="text" name="usuario" class="confondo" value="" maxlength="15" id="usuario" onkeyup="comprueba_usuario();" required>
                             <div id="result_usuario"></div>
                         </div>
                     </div>

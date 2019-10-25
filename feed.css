@@ -1,0 +1,39 @@
+.checkeable input {
+  display: none;
+}
+.checkeable img {
+  width: 250px;
+  height: 125px;
+  border: 10px solid transparent;
+  left: 8%;
+  position: relative;
+}
+.checkeable input {
+  display: none;
+}
+.checkeable input:checked + img {
+  border-color: gray;
+}
+.recuadro {
+	position: relative; 
+	top: 45%;
+  left: 1.5%;
+	background-color: #B6F8F7;
+	width: 100%;
+	height: 10%;
+	overflow-y: auto;
+}
+button {
+  margin-top:0px;
+  font-size:25px;
+  color:rgb(1,1,1);
+  border:none;
+  outline:none;
+  height:50px;
+  text-transform:uppercase;
+  background:pink;
+  width:40%;
+  color:#DE4AB4;
+  cursor:pointer;
+  border-radius: 15px;
+}
