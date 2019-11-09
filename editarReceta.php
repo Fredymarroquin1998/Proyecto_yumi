@@ -21,7 +21,7 @@
             $cantidad_personas = $row['cantidad_personas'];
             $horas=0;
             $minutos=0;
-            echo $tiempo;
+            
             if ($tiempo<60) {
                 $minutos=$tiempo;
             }else {
@@ -79,7 +79,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -93,7 +93,7 @@
                 <nav class="nav">
                     <div class="izquierda">
                     <br>
-                        <center>imagen actual</center>
+                        
                         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
                         <?php
                    
@@ -350,7 +350,19 @@
             var slider = document.getElementById("myRange");
             var output = document.getElementById("demo");
             output.innerHTML = slider.value;
-
+            var comple = <?php echo $complejidad; ?>;
+                if (comple==1) {
+                    output.innerHTML = "Facil";
+                } else if (comple==2) {
+                    output.innerHTML = "Baja";
+                } else if (comple==3) {
+                    output.innerHTML = "Media";
+                } else if (comple==4) {
+                    output.innerHTML = "Alta";
+                } else{
+                    output.innerHTML = "Complicada";
+                
+                } 
             slider.oninput = function() {
                 if (this.value==1) {
                     output.innerHTML = "Facil";

@@ -66,10 +66,18 @@
       </label>
     </div>
     <div id ="select2lista" name="select2lista"> </div>
-    <center><a href="cuenta.php"><button>finalizar</button></a></center>
+    <center><button onclick="ver();">finalizar</button></center>
   </body>
 </html>
 <script type="text/javascript">
+ var frutas = [];
+
+    function ver(){
+      if(frutas.length > 0){
+        location.href ="cuenta.php";
+      }
+      
+    }
     function validar(a){
       var pasta = document.getElementById('pasta').checked;
       var pastel = document.getElementById('pastel').checked;
@@ -174,7 +182,11 @@
         tipo = 4;
         b = 3;
       }
-      
+      if(b == 1){
+        frutas.push('1');
+      }else{
+        frutas.pop();
+      }
       $.ajax({
             type:"POST",  
             url:"feedAjax.php",

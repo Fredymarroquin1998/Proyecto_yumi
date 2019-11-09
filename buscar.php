@@ -48,7 +48,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -118,6 +118,7 @@
                             <div class="receta_tipo"><?php echo $type ?></div>
                             <div class="receta_calorias"><?php echo $calor ?> calorias</div>
                             <div class="receta_calificacion">Calificacion: <?php echo $cal ?></div>
+                            <br>
                         </div>
                     </a>
             <?php

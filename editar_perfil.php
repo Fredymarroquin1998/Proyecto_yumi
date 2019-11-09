@@ -174,7 +174,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -245,18 +245,18 @@
                         </div>
                         <div class="row">
                             <div class="label0">Nombre</div>
-                            <input type="text" name="nombre" class="confondo" value="<?php echo $row[2] ?>" style="text-transform: capitalize;" maxlength="50" required>
+                            <input type="text" name="nombre" class="confondo" value="<?php echo $row[2] ?>"  maxlength="50" required>
                         </div>
                         <div class="row">
                             <div class="label0">Apellido</div>
-                            <input type="text" name="apellido" class="confondo" value="<?php echo $row[3] ?>" style="text-transform: capitalize;" maxlength="50" required>
+                            <input type="text" name="apellido" class="confondo" value="<?php echo $row[3] ?>"  maxlength="50" required>
                         </div>
                     </div>
                     <div class="abajo_derecha">
                         <div class="row">
                             <div class="label">Correo Electronico</div>
                             <div class="verificar_c">
-                                <input type="text" name="correo" class="confondo" value="<?php echo $row[1] ?>" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
+                                <input type="text" name="correo" class="confondo" value="<?php echo $row[1] ?>" pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
                                 <div id="result"></div>
                             </div>
                         </div>
@@ -266,7 +266,7 @@
                         </div>
                         <div class="row">
                             <div class="label">Descripcion</div>
-                            <input type="text" name="descripcion" class="confondo" value="<?php echo $row[5] ?>" style="text-transform: capitalize;" maxlength="200" required>
+                            <input type="text" name="descripcion" class="confondo" value="<?php echo $row[5] ?>" maxlength="200" required>
                         </div>
                     </div>
                     <div class="guardar">

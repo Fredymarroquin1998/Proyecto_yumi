@@ -48,7 +48,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="numbre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -89,8 +89,17 @@
         <div class="cantidad_recetas">
             <input type="hidden" name="cant_recetas"><font size="5"><b><?php echo $cantidad; ?><br>Recetas</b></font>
         </div>
+        <?php
+        echo $id_usuario;
+                        $query="SELECT calificacion FROM recetas where id_usuario = '$usuario_actual' ";
+                        $resultado=mysqli_query($mysqli,$query);
+                        $estrellasT = 0;
+                        while ($row=$resultado->fetch_assoc()) {
+                            $estrellasT = $row['calificacion'] + $estrellasT;
+                        }
+        ?>
         <div class="estrellas">
-            <input type="hidden" name="estrellas"><font size="5"><b>1000<br>Estrellas</b></font>
+            <input type="hidden" name="estrellas"><font size="5"><b><?php echo $estrellasT; ?><br> Estrellas</b></font>
         </div>
         <div class="descripcion">
             <input type="hidden" name="descripcion" maxlength="200"><font size="4"><?php echo $description; ?></font>
@@ -107,7 +116,14 @@
                             $user=$row['id_usuario'];
                             $type=$row['tipo'];
                             $calor=$row['calorias'];
+                            $persona=$row['persona'];
                             $cal=$row['calificacion'];
+                            if($persona == 0){
+                                $cal = 0;
+                            }else{
+                                $cal = $cal / $persona;
+                            }
+                            
                             $id_receta=$row['id_receta'];
                             if ($row['tipo']==1) {
                                 $type='Bebida';
@@ -139,14 +155,20 @@
                                 $type='Mariscos';
                             }
                             echo "<a href='receta.php?receta=$id_receta' target='_blank'>";
+
                     ?>
                                 <div class="grid-item">
                                     <div class="receta_imagen"><img height="100%" width="100%" src="data:image/jpg;base64,<?php echo base64_encode($row['imagen']); ?>"></div>
+
                                     <div class="receta_titulo" style="color:#000;"><?php echo $name; ?></div>
+                                    <?php if(strlen($name) <= 18){
+                                            echo '<br>-';
+                                            }
+                                        ?>
                                     <div class="receta_usuario"><img height="20" width="20" src="css/imagenes/user"><?php echo $user ?></div>
                                     <div class="receta_tipo"><?php echo $type ?></div>
                                     <div class="receta_calorias"><?php echo $calor ?> calorias</div>
-                                    <div class="receta_calificacion">Calificacion: <?php echo $cal ?></div>
+                                    <div class="receta_calificacion">Calificacion: <?php echo round($cal, 1) ?></div>
                                     <br>
                                 </div>
                             </a>
@@ -171,6 +193,12 @@
                             $type1=$row1['tipo'];
                             $calor1=$row1['calorias'];
                             $cal1=$row1['calificacion'];
+                            $persona=$row1['persona'];
+                            if($persona == 0){
+                                $cal1 = 0;
+                            }else{
+                                $cal1 = $cal1 / $persona;
+                            }
                             if ($row1['tipo']==1) {
                                 $type1='Bebida';
                             } else if ($row1['tipo']==2) {
@@ -205,10 +233,14 @@
                                 <div class="grid-item">
                                     <div class="receta_imagen"><img height="100%" width="100%" src="data:image/jpg;base64,<?php echo base64_encode($row1['imagen']); ?>"></div>
                                     <div class="receta_titulo" style="color:#000;"><?php echo $name1; ?></div>
+                                    <?php if(strlen($name1) <= 18){
+                                            echo '<br>-';
+                                            }
+                                        ?>
                                     <div class="receta_usuario"><img height="20" width="20" src="css/imagenes/user"><?php echo $user1 ?></div>
                                     <div class="receta_tipo"><?php echo $type1 ?></div>
                                     <div class="receta_calorias"><?php echo $calor1 ?> calorias</div>
-                                    <div class="receta_calificacion">Calificacion: <?php echo $cal1 ?></div>
+                                    <div class="receta_calificacion">Calificacion: <?php echo round($cal1, 1) ?></div>
                                     <br>
                                 </div>
                             </a>

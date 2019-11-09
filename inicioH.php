@@ -8,18 +8,34 @@
 
         $arregloF=$_POST['valor'];
         $likes=$_POST['noReceta'];
-       
+        $us = $_SESSION['id_usuario'];
+        $query="SELECT * FROM recetas where id_usuario = '$us' ";
+        $resultado=mysqli_query($mysqli,$query);
+        while ($row=$resultado->fetch_assoc()) {
+            $id_receta=$row["id_receta"];
+            for ($i=0; $i < count($likes); $i++){ 
+                if($likes[$i] == $id_receta){
+                    $likes[$i] = -2;
+                }
+            }
+        }
         
         for ($i=0; $i < count($likes); $i++){ 
         $query="SELECT * FROM recetas where id_receta = $likes[$i] ";
         $resultado=mysqli_query($mysqli,$query);
         while ($row=$resultado->fetch_assoc()) {
-                
-            $name=$row['nombre_receta'];
+            if($arregloF[$i] == 0){
+                $name=$row['nombre_receta'];
             $user=$row['id_usuario'];
             $id_receta=$row["id_receta"];
             $calor=$row['calorias'];
             $cal=$row['calificacion'];
+            $persona=$row['persona'];
+            if($persona == 0){
+                $cal = 0;
+            }else{
+                $cal = $cal / $persona;
+            }
             if ($row['tipo']==1) {
                         $type='Bebida';
                     } else if ($row['tipo']==2) {
@@ -57,11 +73,13 @@
                             <div class="receta_titulo" style="color:#000;">'.$name.'</div>
                             <div class="receta_usuario"><img height="20" width="20" src="css/imagenes/user">'.$user.'</div>
                             <div class="receta_tipo">'.$type.'</div>
-                            <div class="receta_calorias">'.$calor.'calorias</div>
-                            <div class="receta_calificacion">Calificacion:'.$cal.'</div>
+                            <div class="receta_calorias">'.$calor.' calorias</div>
+                            <div class="receta_calificacion">Calificacion: '.round($cal, 1).'</div>
                             ';
                     echo "<br>";
                     echo '</div></a>';
+            }
+            
         }
     }
     

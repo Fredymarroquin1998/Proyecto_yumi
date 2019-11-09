@@ -9,11 +9,7 @@
     if (isset($_POST['submit'])) {
     
         $id_usuario=$_SESSION['id_usuario'];
-        
-        
-            
-        
-        
+
         $nombre=$_POST['nombre'];
         $id_receta=$_POST['id_receta'];
         $descripcion=$_POST['descripcion'];
@@ -109,7 +105,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="40" height="40"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="40" height="40"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="40" height="40"><br>Salir</a></li>
                 </ul>
             </div>

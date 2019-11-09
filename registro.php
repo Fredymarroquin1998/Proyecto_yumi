@@ -84,7 +84,7 @@
                     <div class="row">
                         <div class="label">Correo electronico</div>
                         <div class="verificar_c">
-                            <input type="text" name="correo" class="confondo" value="" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
+                            <input type="text" name="correo" class="confondo" value="" pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
                             <div id="result"></div>
                         </div>
                     </div>

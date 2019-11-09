@@ -55,7 +55,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -88,7 +88,8 @@
                             <div class="label1">Ingredientes:<br>
                                 <table id="tabla_ingredientes">  
                                     <tr>  
-                                        <td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." style="text-transform: capitalize;" required></td>  
+                                        <td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." 
+                                           required></td>  
                                         <td><button type="button" name="add_ingrediente" id="add_ingrediente" class="mas" onclick="ing()">+</button></td>  
                                     </tr>  
                                 </table>  
@@ -96,9 +97,10 @@
                         </div>
                         <div class="row">
                             <div class="label1"><br>Preparacion:<br>
-                                <table id="tabla_preparacion">  
+                                <table id="tabla_preparacion"> 
                                     <tr>  
-                                        <td><input type="text" name="preparacion[]" placeholder="Primer paso..." style="text-transform: capitalize;" required></td>  
+                                        <td><input type="text" name="preparacion[]" placeholder="Primer paso..." 
+                                           required></td>  
                                         <td><button type="button" name="add_preparacion" id="add_preparacion" class="mas" onclick="pre()">+</button></td>  
                                     </tr>  
                                 </table>  
@@ -108,7 +110,8 @@
                     <div class="derecha">
                         <div class="row">
                             <div class="label">Nombre Receta: <br>
-                                <input type="text" name="nombre" class="confondo" maxlength="29" style="text-transform: capitalize;" required>
+                                <input type="text" name="nombre" class="confondo" maxlength="29" 
+                                   required>
                             </div>
                         </div>
                         <div class="row">
@@ -137,8 +140,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="label">Complejidad: 
-                                <input type="range" min="1" max="5" class="slider" required id="myRange" name="complejidad"><span id="demo"></span>
+                            <div class="label">Complejidad: <input type="range" min="1" max="5" class="slider" required id="myRange" name="complejidad"><span id="demo"></span>
                             </div>
                         </div>
                         <div class="row">
@@ -159,8 +161,10 @@
                             <div class="label">Calorias: 
                                 <input type="number" name="calorias" min="0" class="numeros" pattern="[0-9]+" value="0">
                             </div>
-                        </div>                    
+                        </div>  
+                        <br>
                     </div>
+                    <br>
                     <div class="row">
                         <button type="submit" name="submit">PUBLICAR</button>
                     </div>  
@@ -194,11 +198,27 @@
                 $gustar = array();
                 $guar = array();
                 $arrayM = array();
+
+                $califProm = array();
+                $tipoTotal = array();
+
+                $calificarPrueba = array();
                 while ($row=$resultado->fetch_assoc()) {
                     $name=$row['nombre_receta'];
                     $user=$row['id_usuario'];
                     $id_receta=$row['id_receta'];
+                    $cal=$row['calificacion'];
+                    $pe=$row['persona'];
+                    $ti=$row['tipo'];
+                    if($pe == 0){
+
+                        $cal = 0;
+                    }else{
+                        $cal = $cal / $pe;
+                    }
                     array_push($arrayM,$id_receta );
+                    array_push($califProm,$cal );
+                    array_push($tipoTotal,$ti );
 
                     if(array_search($id_receta, $likes) != null){
                         $clave = array_search($id_receta, $likes);
@@ -209,7 +229,7 @@
                     
                     if(array_search($id_receta, $guardadas) != null){
                         $clave = array_search($id_receta, $guardadas);
-                        array_push($guar,1 );          
+                        array_push($guar,1);          
                     }else{
                         array_push($guar,0);
                     }
@@ -244,7 +264,7 @@
                         $type='Mariscos';
                     }
                     $calor=$row['calorias'];
-                    $cal=$row['calificacion'];
+                    
 
                     /*echo "<a href='receta.php?receta=$id_receta' target='_blank'>";
                     
@@ -267,6 +287,61 @@
             <?php
                 }
                 //echo "</div>";
+                $query="SELECT * FROM recetas ORDER BY id_receta DESC";
+                $resultado=mysqli_query($mysqli,$query);
+                $estrellasPersonales = array();
+                $calificacionG = array();
+                $guardadasG = array();
+                $arrayG = array();
+                $tipo = array();
+
+                
+                while ($row=$resultado->fetch_assoc()) {
+                    $name=$row['nombre_receta'];
+                    $user=$row['id_usuario'];
+                    $id_receta=$row['id_receta'];
+
+                    $calG = $row['calificacion'];
+                    $per = $row['persona'];
+                    $tipos = $row['tipo'];
+                    if($per == 0){
+                        $calG = 0;
+                    }
+
+                    
+
+                    if(array_search($id_receta, $likes) != null and array_search($id_receta, $guardadas) != null){
+                        $clave = array_search($id_receta, $likes);
+                        array_push($estrellasPersonales,$likes[$clave] );
+                        
+                        array_push($arrayG, $id_receta);
+                        
+                        array_push($guardadasG,1 );
+                        array_push($calificacionG,$calG );
+                        array_push($tipo,$tipos );
+
+                    }else if(array_search($id_receta, $guardadas) != null){
+                        array_push($arrayG, $id_receta);
+                        array_push($estrellasPersonales,0 );
+                        array_push($guardadasG,1 );
+                        
+                        array_push($calificacionG,$calG );
+                        array_push($tipo,$tipos );
+
+                    }else if(array_search($id_receta, $likes) != null){
+                        $clave = array_search($id_receta, $likes);
+                        array_push($estrellasPersonales,$likes[$clave] );
+                        array_push($guardadasG,0);
+                        
+                        array_push($calificacionG,$calG );
+                        array_push($tipo,$tipos );
+                        array_push($arrayG, $id_receta);
+                    }else{
+
+                    }
+
+                }
+                
             ?>
             
             <div id="select2lista" class="grid-container"> </div>
@@ -287,6 +362,8 @@
             var output = document.getElementById("demo");
             output.innerHTML = slider.value;
 
+            output.innerHTML = "Media";
+            
             slider.oninput = function() {
                 if (this.value==1) {
                     output.innerHTML = "Facil";
@@ -306,22 +383,24 @@
         </script>
 
         <script>  
+
             $(document).ready(function ing(){  
                 var i=1;
                 $('#add_ingrediente').click(function(){  
                     i++;  
-                    $('#tabla_ingredientes').append('<tr id="linea'+i+'"><td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." class="name_list" style="text-transform: capitalize;" required></td><td><button type="button" name="remove ingrediente" id="'+i+'" class="btn_remove"> x </button></td></tr>');  
+                    $('#tabla_ingredientes').append('<tr id="linea'+i+'"><td><input type="text" name="ingredientes[]" placeholder="Agregar ingrediente..." class="name_list" required></td><td><button type="button" name="remove ingrediente" id="'+i+'" class="btn_remove"> x </button></td></tr>'); 
                 });
                 $(document).on('click', '.btn_remove', function(){  
                     var button_id = $(this).attr("id");   
                     $('#linea'+button_id+'').remove();  
                 });    
             });
+
              $(document).ready(function pre(){  
                 var j=1;
                 $('#add_preparacion').click(function(){  
                     j++;  
-                    $('#tabla_preparacion').append('<tr id="lineas'+j+'"><td><input type="text" name="preparacion[]" placeholder="Siguiente paso..." class="name_list" style="text-transform: capitalize;" required></td><td><button type="button" name="remove preparacion" id="'+j+'" class="btns_remove"> x </button></td></tr>');  
+                    $('#tabla_preparacion').append('<tr id="lineas'+j+'"><td><input type="text" name="preparacion[]" placeholder="Siguiente paso..." class="name_list" required></td><td><button type="button" name="remove preparacion" id="'+j+'" class="btns_remove"> x </button></td></tr>');  
                 });  
                 $(document).on('click', '.btns_remove', function(){  
                     var buttons_id = $(this).attr("id");   
@@ -394,30 +473,68 @@ $(document).ready(function () {
     var estrella = <?php echo json_encode($gustar);?>;
     var guardadas = <?php echo json_encode($guar);?>;
     var arrayM = <?php echo json_encode($arrayM);?>;
+
+    var estrellasPer = <?php echo json_encode($estrellasPersonales);?>;
+    var caliG = <?php echo json_encode($calificacionG);?>;
+
+    var guardaG = <?php echo json_encode($guardadasG);?>;
+
+    var arrG = <?php echo json_encode($arrayG);?>;
+
+    var tipo = <?php echo json_encode($tipo);?>;
+
+    var train= [];
+    
+    
+
+
+    var calificacionPromedio = <?php echo json_encode($califProm);?>;
+    var tipoTotal = <?php echo json_encode($tipoTotal);?>;
+
      
-            var train= [
-                { input: { estrellas: 1,guardar: 1 }, output: { s: 0.42 } },
-                { input: { estrellas: 1,guardar: 0 }, output: { s: 0.32 } },
-                { input: { estrellas: 2,guardar: 1 }, output: { s: 0.47 } },
-                { input: { estrellas: 2,guardar: 0 }, output: { s: 0.42 } },
-                { input: { estrellas: 3,guardar: 1 }, output: { s: 0.62 } },
-                { input: { estrellas: 3,guardar: 0 }, output: { s: 0.52 } },
-                { input: { estrellas: 4,guardar: 1 }, output: { s: 0.82 } },
-                { input: { estrellas: 4,guardar: 0 }, output: { s: 0.72 } },
-                { input: { estrellas: 5,guardar: 1 }, output: { s: 1.02 } },
-                { input: { estrellas: 5,guardar: 0 }, output: { s: 0.97 } },
-                { input: { estrellas: 0,guardar: 1 }, output: { s: 0.22 } },
-                { input: { estrellas: 0,guardar: 0 }, output: { s: 0.02 } },
-                ];
+    var i = 0;
+
+
+        while(i != arrG.length ){
+
+            var t2={
+                calificacionGlobal: caliG[i],
+                tipo: tipo[i]
+            }
+
+            var guardados = guardaG[i];
+
+            if(estrellasPer[i] == 0){
+                guardados = guardaG[i] + 0.70;
+            }else if(estrellasPer[i] == 5){
+                guardados = guardaG[i] + 0.90;
+            }else if(estrellasPer[i] == 4){
+                guardados = guardaG[i] + 0.60;
+            }else if(estrellasPer[i] == 3){
+                guardados = guardaG[i] + 0.50;
+            }else if(estrellasPer[i] == 2){
+                guardados = guardaG[i] + 0.40;
+            }else {
+                guardados = guardaG[i] + 0.30;
+            }
+            
+            var t3={
+                s: guardados
+            }
+            i++;
+            train.push({input: t2, output: t3});
+        }
+
             var net = new brain.NeuralNetwork();
+
             net.train( train );
             
             for (var i = 0; i < estrella.length; i+=1) {
         
         
           var t={
-            estrellas: guardadas[i],
-            guardar: estrella[i]
+            calificacionGlobal: calificacionPromedio[i],
+            tipo: tipoTotal[i]
             };
 
             var result=net.run( t );
@@ -445,15 +562,18 @@ $(document).ready(function () {
                       var temp = arregloF[i];
                       
                       var temp2 = arrayM[i];
+                      var temp3 = guardadas[i];
                       //alert(1);
                       while ((j >= inc) && (arregloF[j-inc] <  temp))
                       {
                           arregloF[j] = arregloF[j - inc];
                           arrayM[j] = arrayM[j - inc];
+                          guardadas[j] = guardadas[j - inc];
                           j = j - inc;
                       }
                       arregloF[j] = temp;
                       arrayM[j] = temp2;
+                      guardadas[j] = temp3;
                 }
                 inc/= 2;
                 
@@ -461,11 +581,11 @@ $(document).ready(function () {
 
             
 
-
+            
         $.ajax({
             type:"POST",  
             url:"inicioH.php",
-            data: {valor: arregloF,noReceta: arrayM},
+            data: {valor: guardadas,noReceta: arrayM},
             success:function(r){
                 $('#select2lista').html(r);
                 }
@@ -473,10 +593,5 @@ $(document).ready(function () {
             
 
             
-        </script>
-        <script>
-            $("#ejemplo").click(function(){
-                $.notify("hola");
-            });
         </script>
 

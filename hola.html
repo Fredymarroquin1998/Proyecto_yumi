@@ -52,38 +52,32 @@
 </style>
  
 <script>
-    var arregloF =[];
+  alert('todo bien'); 
     /* Esta función se encarga de ejecutar el formulario sobre la red neuronal */
-    function testModel() {
-        var t={
-            estrellas: document.getElementById("estrellas").value,
-            guardar: document.getElementById("guardar").value,
-            calificacion: document.getElementById("calificacion").value
-           
-            };
- 
-        var result=net.run( t );
-        var aux =JSON.stringify(result.s);
-        alert(aux);
-        }          
-            /* Declaramos el set de datos de entrenamiento */
-            var train= [
-                { input: { estrellas: 1,guardar: 1 }, output: { s: 0.42 } },
-                { input: { estrellas: 1,guardar: 0 }, output: { s: 0.32 } },
-                { input: { estrellas: 2,guardar: 1 }, output: { s: 0.47 } },
-                { input: { estrellas: 2,guardar: 0 }, output: { s: 0.42 } },
-                { input: { estrellas: 3,guardar: 1 }, output: { s: 0.62 } },
-                { input: { estrellas: 3,guardar: 0 }, output: { s: 0.52 } },
-                { input: { estrellas: 4,guardar: 1 }, output: { s: 0.82 } },
-                { input: { estrellas: 4,guardar: 0 }, output: { s: 0.72 } },
-                { input: { estrellas: 5,guardar: 1 }, output: { s: 1.02 } },
-                { input: { estrellas: 5,guardar: 0 }, output: { s: 0.97 } },
-                { input: { estrellas: 0,guardar: 1 }, output: { s: 0.22 } },
-                { input: { estrellas: 0,guardar: 0 }, output: { s: 0.02 } },
-
       
-                
-                ];
+
+        var train= [];   
+   
+        var guardar = [1,2,3,1,2,3,1,2,3,1,2,3,1,2,3];
+        var arregloE = [1,2,3,1,2,3,1,2,3,1,2,3,1,2,3];    
+
+        var tipo = [1,1,1,2,2,2,3,3,3,4,4,4,5,5,5];
+        var output = [0.5,0.7,1,0.5,0.7,0.9,0.5,0.7,0.9,0.5,0.9,4,0.5,0.7,0.9];
+        var i = 0;
+
+        while(i != arregloE.length ){
+
+            var t2={
+                calificacion: arregloE[i],
+                reciente: guardar[i],
+                tipo: tipo[i]
+            }
+            var t3={
+                s: output[i]
+            }
+            i++;
+            train.push({input: t2, output: t3});
+        }
 
             /* Declaramos la red neuronal */
             var net = new brain.NeuralNetwork();
@@ -91,6 +85,20 @@
             /* Entrenamos la red neuronal con los datos de entrenamiento */
             net.train( train );
 
+
+            function testModel() {
+                var t={
+                    calificacion: document.getElementById("calificacion").value
+                    reciente: document.getElementById("estrellas").value,
+                    tipo: document.getElementById("guardar").value,
+                    
+                   
+                    };
+         
+                var result=net.run( t );
+                var aux =JSON.stringify(result.s);
+                alert(aux);
+        } 
         </script>
          
     </body>

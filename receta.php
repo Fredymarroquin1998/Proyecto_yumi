@@ -51,7 +51,7 @@
             <div class="menuG">
                 <ul class="menu__list">
                     <li class="menu__group"><a href="inicio.php" class="menu__link"><img src="css/imagenes/home.png" width="65%"><br>Inicio</a></li>
-                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="60%"><br>Perfil</a></li>
+                    <li class="menu__group"><a href="cuenta.php" class="menu__link"><img src="css/imagenes/account.png" width="75%"></a><div class="nombre"><?php echo $_SESSION['id_usuario']?></div></li>
                     <li class="menu__group"><a href="cerrar_sesion.php" class="menu__link"><img src="css/imagenes/logout.png" width="72%"><br>Salir</a></li>
                 </ul>
             </div>
@@ -125,7 +125,7 @@
                     
             echo '<div class="receta">';
                 echo '<div class="arriba">';
-                    echo '<div class="izquierda"> <form method="POST" action="editarReceta.php">';
+                    echo '<div class="izquierda"> ';
 
                         $cuenta = $_SESSION['id_usuario'];
                         $query="SELECT * FROM recetas WHERE id_receta=$id_receta";
@@ -202,10 +202,11 @@
                         
 
 
+                        $user = $row["id_usuario"];
 
                     echo '</div>';
                     echo '<div class="derecha">';
-                        echo '<div class="label0"><img src="css/imagenes/user" width="25" height="25">'.' '.$row["id_usuario"].'<br></div>';
+                        echo '<a style="text-decoration:none" href ="verCuentas.php?variable1='.$user.'"><div class="label0"><img src="css/imagenes/user" width="25" height="25">'.' '.$user.'</a><form method="POST" action="editarReceta.php"><br></div>';
                         $id_us = $row["id_usuario"];
                         $persona = $row["persona"];
                         $calificacion = 0;
@@ -218,7 +219,7 @@
                         echo '<div class="label3"><b>Tipo:</b>'.' '.$type.'</div>';
                         echo '<div class="label4"><b>Tiempo:</b>'.' '.$tiempo.'</div>';
                         echo '<div class="label5"><b>Costo($):</b>'.' '.$row["costo"].'</div>';
-                        echo '<div class="label6"><b>Porciones:</b>'.' '.$row["cantidad_personas"].'</div>';
+                        echo '<div class="label6"><b>Porciones:</b>'.' '.$row["cantidad_personas"].'</div><br>';
                         echo '<div class="label7"><b>Complejidad:</b>'.' '.$row["complejidad"].'</div>';
                         echo '<div class="label8"><b>Calorias:</b>'.' '.$row["calorias"].'</div>';
                         echo '<div class="label9"><b>Calificacion:</b>'.' '.$calificacion.'</div>';
