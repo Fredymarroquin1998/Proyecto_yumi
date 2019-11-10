@@ -1,5 +1,12 @@
 <?php
+    require "PHPMailer/Exception.php";
+    require "PHPMailer/PHPMailer.php";
+    require "PHPMailer/SMTP.php";
     require("conexion.php");
+    
+     
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
     if (isset($_POST['submit']) && !empty($_POST['submit'])) {
         if (isset($_POST['usuario']) && !empty($_POST['usuario']) && isset($_POST['nombre']) && !empty($_POST['nombre']) && isset($_POST['apellido']) && !empty($_POST['apellido']) && isset($_POST['correo']) && !empty($_POST['correo']) && isset($_POST['contrasena']) && !empty($_POST['contrasena']) && isset($_POST['contrasena2']) && !empty($_POST['contrasena2'])) {
             $usuario=$_POST['usuario'];
@@ -32,16 +39,40 @@
                         echo '<script language="javascript">alert("Atencion, ya existe el mail designado para un usuario, verifique sus datos");</script>';
                         echo '<script language="javascript">location.href="registro.php"</script>';
                     }else{
+
                         $query=mysqli_query($mysqli,"INSERT INTO usuarios (id_usuario,correo,nombre_usuario,apellido_usuario,contrasena,foto_perfil,foto_portada) VALUES('$usuario','$correo','$nombre','$apellido','$contrasena','$perfil','$portada')") or die(mysqli_error());
                         $row=@mysqli_fetch_array($query);
+
                         session_start();
                         $_SESSION['id_usuario']=$usuario;
                         $_SESSION['correo']=$correo;
                         
                         
                         echo '<script language="javascript">alert("Usuario registrado con éxito");</script>';
-                        
-                        echo '<script language="javascript">location.href="feed.php"</script>';      
+                        $oMail= new PHPMailer();
+                        $oMail->isSMTP();
+                        $oMail->Host="smtp.gmail.com";
+                        $oMail->Port=587;
+                        $oMail->SMTPSecure="tls";
+                        $oMail->SMTPAuth=true;
+                        $oMail->Username="managedeyumi@gmail.com";
+                        $oMail->Password="yumiyumi";
+                        $oMail->setFrom("managedeyumi@gmail.com","Administrador de Yumi");
+                        $oMail->addAddress($correo,$nombre);
+                        $oMail->Subject="Bienvenido a YUMI!";
+                        $oMail->msgHTML("Hola, queremos darte la bienvenida a yumi ".$nombre.", gracias por entrar a nuestra pagina, te adjuntamos tus datos para que puedas tenerlos,\n\n
+
+                            usuario: ".$usuario."\n
+                            contraseña: ".$contrasena);
+                         
+                        if(!$oMail->send()){
+                          echo $oMail->ErrorInfo;
+                        }else{
+                            echo '<script language="javascript">location.href="feed.php"</script>'; 
+                        }
+ 
+
+                             
                     }
                 }
             }
@@ -84,7 +115,7 @@
                     <div class="row">
                         <div class="label">Correo electronico</div>
                         <div class="verificar_c">
-                            <input type="text" name="correo" class="confondo" value="" pattern="^[a-zA-Z0-9]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
+                            <input type="text" name="correo" class="confondo" value="" pattern="[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$" maxlength="50" id="correo" onkeyup="comprueba_email();" required >
                             <div id="result"></div>
                         </div>
                     </div>
